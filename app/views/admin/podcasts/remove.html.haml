@@ -1,0 +1,20 @@
+%h1 Remove Podcast
+
+%p 
+  Are you sure you want to 
+  %strong.warning permanently remove
+  the following podcast including all
+  of the related episodes?
+
+%table.index#podcast{:cellpadding=>0, :cellspacing=>0, :border=>0}
+  %tbody
+    %tr.node.level-1
+      %td.podcast
+        = image_tag('extensions/podcast/admin/podcast.png', :alt => 'podcast-icon')
+        %span.title= @podcast.title
+
+- form_for [:admin, @podcast], :html => {:method => :delete} do
+  %p.buttons
+    %input.button{:type=>"submit", :value=>"Delete Podcast"}/
+    or
+    = link_to 'Cancel', admin_podcasts_url

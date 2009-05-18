@@ -1,0 +1,69 @@
+- form_for [:admin, @podcast], :html => {:multipart => true} do |f|
+  = render_region :form_top
+  .form-area
+    - render_region :form do |form|
+      - form.edit_title do
+        %p.title
+          = f.label :title
+          = f.text_field :title, :class => 'textbox', :maxlength => 255
+        %p.subtitle
+          = f.label :subtitle, "Subtitle (optional) "
+          = f.text_field :subtitle, :class => 'textbox', :maxlength => 255, :style => "width: 100%"
+      - form.edit_description do
+        %p.description
+          = f.label :description
+          ~ f.text_area :description, :class => "textarea", :style => "width: 100%; height: 100px;"
+      - form.edit_meta do
+        #meta.row
+          %table.fieldset
+            %tr
+              %th.label
+                = f.label :image, "Image", :class => 'optional'
+              %td.field
+                - if !@podcast.image.nil?
+                  %div{ :style => 'float: right;' }
+                    = image_tag(@podcast.image.public_filename)
+                = f.file_field :uploaded_data, :class => 'textbox'
+            %tr
+              %th.label
+                = f.label :author
+              %td.field
+                = f.text_field :author, :class => 'textbox', :maxlength => 255
+            %tr
+              %th.label
+                = f.label :email
+              %td.field
+                = f.text_field :email, :class => 'textbox', :maxlength => 255
+            %tr
+              %th.label
+                = f.label :copyright
+              %td.field
+                = f.text_field :copyright, :class => 'textbox', :maxlength => 255
+            %tr
+              %th.label
+                = f.label :link
+              %td.field
+                - if !@podcast.link.nil?
+                  = f.text_field :link, :class => 'textbox', :maxlength => 4000
+                - else
+                  = f.text_field :link, :value => "http://#{request.host}/", :class => 'textbox', :maxlength => 4000
+            %tr
+              %th.label
+                = f.label :categories
+              %td.field
+                ~ f.text_area :categories, :class => "textarea"
+            %tr
+              %th.label
+                = f.label :keywords
+              %td.field
+                ~ f.text_area :keywords, :class => "textarea"
+
+  = javascript_tag "$('podcast_title').activate()"
+
+  - render_region :form_bottom do |form_bottom|
+    - form_bottom.edit_buttons do
+      %p.buttons
+        = save_model_button(@podcast)
+        or
+        = link_to 'Cancel', admin_podcasts_url
+
