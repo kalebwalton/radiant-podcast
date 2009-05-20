@@ -7,6 +7,7 @@ class PodcastExtension < Radiant::Extension
   url "http://yourwebsite.com/podcast"
   
   define_routes do |map|
+    map.connect 'podcasts/:action', :controller => 'podcasts'
     map.namespace :admin, :member => { :remove => :get } do |admin|
       admin.resources :podcasts
       admin.resources :podcast_episodes

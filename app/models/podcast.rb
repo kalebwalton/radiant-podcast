@@ -15,4 +15,12 @@ class Podcast < ActiveRecord::Base
   validates_length_of :link, :maximum => 4000, :message => '{{count}}-character limit'
   validates_length_of :description, :maximum => 4000, :message => '{{count}}-character limit'
 
+  def validate
+    if !self.image.nil? && !self.image.valid?
+      self.image.errors.each{|attr, msg|
+        errors.add :image, msg
+      }
+    end
+  end
+
 end

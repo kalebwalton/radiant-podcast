@@ -20,10 +20,10 @@
               %th.label
                 = f.label :image, "Image", :class => 'optional'
               %td.field
-                - if !@podcast.image.nil?
-                  %div{ :style => 'float: right;' }
+                - if !@podcast.image.nil? && @podcast.image.valid?
+                  %p
                     = image_tag(@podcast.image.public_filename)
-                = f.file_field :uploaded_data, :class => 'textbox'
+                = f.file_field :image, :class => 'textbox'
             %tr
               %th.label
                 = f.label :author
