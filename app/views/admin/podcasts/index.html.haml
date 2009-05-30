@@ -1,42 +1,32 @@
+- include_javascript 'extensions/podcast/podcast'
 %h1 Podcasts
 
-- render_region :top do |top|
-  - top.help_text do
-    %p Podcasts are meant for syndicating audio messages (sermons, radio broadcasts, etc.)
+%p Podcasts are meant for syndicating audio messages (sermons, radio broadcasts, etc.)
 
 %table#podcasts.index{:cellspacing=>"0", :border=>"0", :cellpadding=>"0"}
   %thead
     %tr
-      - render_region :thead do |thead|
-        - thead.title_header do
-          %th.title Title
-        - thead.latest_episode_header do
-          %th.latest_episode Latest Episode
-        - thead.actions_header do
-          %th.actions Actions
+      %th.title Title
+      %th.latest_episode Latest Episode
+      %th.actions Actions
   %tbody
     - @podcasts.each do |podcast|
       %tr.node.level-1
-        - render_region :tbody do |tbody|
-          - tbody.title_cell do
-            %td.title
-              = image_tag('extensions/podcast/admin/podcast.png', :alt => 'podcast-icon')
-              %span= link_to podcast.title, edit_admin_podcast_url(podcast)
-          - tbody.latest_episode_cell do
-            %td.latest_episode
-              - if podcast.episodes.empty?
-                %span.latest_episode_empty= "No episodes"
-              - else
-                %span.latest_episode_date= podcast.episodes[0].publish_on
-                %span.latest_episode_title= podcast.title
-          - tbody.actions_cell do
-            %td.actions
-              = link_to image_tag('extensions/podcast/admin/manage-episodes.png', :alt => 'Manage Episodes'), admin_podcasts_url
-              = link_to image_tag('extensions/podcast/admin/submit-to-itunes.png', :alt => 'Submit to iTunes'), admin_podcasts_url
-              = link_to image_tag('extensions/podcast/admin/copy-feed-url.png', :alt => 'Copy Feed URL to Clipboard'), admin_podcasts_url
-              = link_to image('remove', :alt => 'Remove Podcast'), remove_admin_podcast_url(podcast)
+        %td.title
+          = image_tag('extensions/podcast/admin/podcast.png', :alt => 'podcast-icon')
+          %span= link_to podcast.title, edit_admin_podcast_url(podcast)
+        %td.latest_episode
+          - if podcast.episodes.empty?
+            %span.latest_episode_empty= "No episodes"
+          - else
+            %span.latest_episode_date= timestamp(podcast.episodes[0].publish_on)
+            %span -
+            %span.latest_episode_title= podcast.episodes[0].title
+        %td.actions
+          = link_to image_tag('extensions/podcast/admin/manage-episodes.png', :alt => 'Manage Episodes'), admin_podcast_podcast_episodes_path(podcast) 
+          = link_to image_tag('extensions/podcast/admin/submit-to-itunes.png', :alt => 'Submit to iTunes'), submit_to_itunes_path(podcast)
+          = link_to_function image_tag('extensions/podcast/admin/copy-feed-url.png', :alt => 'Copy Feed URL to Clipboard'), "copy_feed_url('#{podcast_feed_url(podcast)}')"
+          = link_to image('remove', :alt => 'Remove Podcast'), remove_admin_podcast_url(podcast)
 
-- render_region :bottom do |bottom|
-  - bottom.new_button do
-    %p
-      = link_to image_tag('extensions/podcast/admin/new-podcast.png', :alt => 'New Podcast'), new_admin_podcast_url
+%p
+  = link_to image_tag('extensions/podcast/admin/new-podcast.png', :alt => 'New Podcast'), new_admin_podcast_url

@@ -6,8 +6,11 @@ class CreatePodcastEpisodes < ActiveRecord::Migration
       t.string :subtitle
       t.text :description
       t.date :publish_on
+      t.string :link
       t.string :content_type
       t.string :filename
+      t.integer :number
+      t.integer :duration
       t.integer :size
       t.integer :parent_id
       t.string :thumbnail

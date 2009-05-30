@@ -1,0 +1,21 @@
+%h1 
+  Remove Episode of 
+  = "'"+@podcast.title+"'"
+
+%p 
+  Are you sure you want to 
+  %strong.warning permanently remove
+  the following episode?
+  
+%table.index#podcast_episode{:cellpadding=>0, :cellspacing=>0, :border=>0}
+  %tbody
+    %tr.node.level-1
+      %td.podcast_episode
+        = image_tag('extensions/podcast/admin/episode.png', :alt => 'podcast-icon')
+        %span.title= @podcast_episode.title
+
+- form_for [:admin, @podcast, @podcast_episode], :html => {:method => :delete} do
+  %p.buttons
+    %input.button{:type=>"submit", :value=>"Delete Episode"}/
+    or
+    = link_to 'Cancel', admin_podcast_podcast_episodes_url(@podcast)

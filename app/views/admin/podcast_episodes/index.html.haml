@@ -1,0 +1,43 @@
+%h1 
+  Episodes of
+  = "'"+@podcast.title+"'"
+  - if !params[:year].nil?
+    in
+    = params[:year]
+- unless @oldest_episode_year.nil? || @current_year == @oldest_episode_year
+  %p
+    %strong Year: &nbsp;
+    - @years.each do |year|
+      - if year.to_s == params[:year] || (params[:year].nil? && year == @current_year)
+        %strong= year
+      - else
+        = link_to "#{year}", podcast_episodes_by_year_url(@podcast, year)
+      &nbsp;
+%table#podcast_episodes.index{:cellspacing=>"0", :border=>"0", :cellpadding=>"0"}
+  %thead
+    %tr
+      %th.number #
+      %th.title Title
+      %th.date Date
+      %th.length Duration
+      %th.size Size
+      %th.actions Actions
+  %tbody
+    - @podcast_episodes.each do |episode|
+      %tr.node.level-1
+        %td.number
+          = episode.number
+        %td.title
+          = image_tag('extensions/podcast/admin/episode.png', :alt => 'podcast-icon')
+          = link_to episode.title, edit_admin_podcast_podcast_episode_url(@podcast, episode)
+        %td.date
+          = timestamp(episode.publish_on)
+        %td.length
+          = human_duration(episode.duration)
+        %td.size
+          = human_filesize(episode.size)  
+        %td.actions
+          = link_to image('remove', :alt => 'Remove Episode'), remove_admin_podcast_podcast_episode_url(@podcast, episode)
+
+%p
+  = link_to image_tag('extensions/podcast/admin/new-episode.png', :alt => 'New Episode'), new_admin_podcast_podcast_episode_url(@podcast)
