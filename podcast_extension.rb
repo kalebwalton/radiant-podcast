@@ -10,7 +10,7 @@ class PodcastExtension < Radiant::Extension
 
     map.named_route :podcast, 'podcast/:slug', :controller => 'podcast'
     map.named_route :podcast_by_year, 'podcast/:slug/:year', :controller => 'podcast'
-    map.named_route :podcast_episodes_by_year, 'admin/podcasts/:podcast_id/episodes/:year', :controller => 'admin/podcast_episodes'
+    map.named_route :podcast_episodes_by_year, 'admin/podcasts/:podcast_id/episodes/year/:year', :controller => 'admin/podcast_episodes'
     map.named_route :submit_to_itunes, 'admin/podcasts/:podcast_id/itunes', :controller => 'admin/podcasts', :action => 'itunes'
     map.namespace :admin, :member => { :remove => :get } do |admin|
       admin.resources :podcasts, :member => { :remove => :get, :itunes => :get } do |podcasts|

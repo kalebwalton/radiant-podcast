@@ -45,8 +45,11 @@
         %tr
           %th.label
             = f.label :categories
-          %td.field{:style=>'float: none'}
-            ~ f.select :categories_array, itunes_categories_options_for_select, {}, {:multiple => true, :size => '10'}
+          %td.field{:style=>'text-align: left;'}
+            ~ f.select :categories_array, itunes_categories_options_for_select, {}, {:style=>"float: left; margin-left: 6px;", :multiple => true, :size => '10'}
+            %div{:style=>'float: left; margin-left: 5px; width: 125px'} 
+              CTRL+click to select
+              multiple categories
         %tr
           %th.label
             = f.label :keywords

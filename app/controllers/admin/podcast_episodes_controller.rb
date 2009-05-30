@@ -1,7 +1,8 @@
 class Admin::PodcastEpisodesController < Admin::ResourceController
   before_filter :find_podcast
   before_filter :add_number_value, :only => [:create]
-  after_filter :update_duration, :only => [:create, :update]
+  before_filter :set_duration_properties, :only => [:edit]
+  before_filter :set_duration_value, :only => [:update, :create]
 
   def find_podcast
     @podcast = Podcast.find(params[:podcast_id]) rescue nil unless params[:podcast_id].nil?
@@ -21,11 +22,26 @@ class Admin::PodcastEpisodesController < Admin::ResourceController
     @current_year = Time.now.strftime("%Y").to_i
     @years = (@oldest_episode_year..@current_year).to_a.reverse unless @current_year.nil? || @oldest_episode_year.nil?
   end
+
+  def set_duration_properties
+    unless @podcast_episode.nil? || @podcast_episode.duration.nil?
+      d = @podcast_episode.duration
+      @duration_hours = d/60/60
+      d -= @duration_hours * 60 * 60
+      @duration_minutes = d/60
+      d -= @duration_minutes * 60
+      @duration_seconds = d
+    end
+  end
   
-  def update_duration
-    #FIXME - Implement duration discovery for all media formats
+  def set_duration_value
+    #FIXME - Implement duration discovery for all media formats. For now we'll use manual entry.
     if !@podcast_episode.nil? && @podcast_episode.valid?
-      @podcast_episode.update_attributes!(:duration => 3661) #1 hour, 1 minutes, 1 seconds
+      hours = params[:duration_hours].to_i
+      minutes = params[:duration_minutes].to_i
+      seconds = params[:duration_seconds].to_i
+      duration = (hours*60*60) + (minutes*60) + seconds
+      params[:podcast_episode][:duration] = duration;
     end
   end
 

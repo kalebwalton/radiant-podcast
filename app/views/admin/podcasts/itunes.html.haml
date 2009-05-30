@@ -1,3 +1,31 @@
-%h1 Submit Podcast to iTunes
+- include_javascript 'extensions/podcast/podcast'
+%h1 
+  Submit
+  = "'#{@podcast.title}'"
+  Podcast to iTunes
 
-= @podcast.title #FIXME - Fill out the Submit to iTunes section
+%ol
+  %li 
+    Right click 
+    = link_to "this link", podcast_feed_url(@podcast)
+    and copy the link address to your clipboard in preparation for the next step (copies the address
+    %span{:style=>"white-space: nowrap;"}
+      = "'#{podcast_feed_url(@podcast)}'"
+    to your clipboard)
+    %br
+    %br
+  %li
+    Follow the 
+    = link_to "instructions", 'http://www.apple.com/itunes/whatson/podcasts/specs.html', :target=>"_blank"
+    found at the Apple iTunes
+    = link_to "Making a Podcast", 'http://www.apple.com/itunes/whatson/podcasts/specs.html', :target=>"_blank"
+    page, using the address you copied to your clipboard when prompted for a 'Feed URL'
+    %ul
+      %li
+        %em
+          NOTE:
+          Pay special attention to the sections titled
+          = link_to "Testing Your Feed", 'http://www.apple.com/itunes/whatson/podcasts/specs.html#testing', :target=>"_blank"
+          and
+          = link_to "Submitting Your Podcast to the iTunes Store", 'http://www.apple.com/itunes/whatson/podcasts/specs.html#submitting', :target=>"_blank"
+    

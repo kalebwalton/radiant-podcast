@@ -14,11 +14,22 @@
       %table.fieldset
         %tr
           %th.label
-            = f.label :uploaded_data, "Audio/Video File", :class => 'textbox'
+            = f.label :uploaded_data, "File", :class => 'textbox'
           %td.field{:style=>'text-align: left'}
             - unless @podcast_episode.filename.nil?
-              %p= @podcast_episode.filename
+              %p= link_to @podcast_episode.filename, @podcast_episode.public_filename
             = f.file_field :uploaded_data, :class => 'textbox'
+        %tr
+          %th.label
+            = f.label :duration
+          %td.field{:style=>'text-align: left'}
+            %div
+              = select_tag :duration_hours, options_for_select(0..12, @duration_hours || 0)
+              hours
+              = select_tag :duration_minutes, options_for_select(0..59, @duration_minutes || 0)
+              minutes
+              = select_tag :duration_seconds, options_for_select(0..59, @duration_seconds || 0)
+              seconds
         %tr
           %th.label
             = f.label :publish_on
@@ -35,5 +46,5 @@
   %p.buttons
     = save_model_button(@podcast_episode, :label => @podcast_episode.new_record? ? "Create Episode" : "Save Changes")
     or
-    = link_to 'Cancel', admin_podcasts_url
+    = link_to 'Cancel', admin_podcast_podcast_episodes_url(@podcast)
 

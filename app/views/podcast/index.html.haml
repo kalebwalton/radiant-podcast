@@ -25,8 +25,7 @@
           %description= episode.description
           %link= episode.link
           %enclosure{:url => full_absolute_url(episode.public_filename), :type => episode.content_type}
-          #FIXME - Make the proper date format
-          %pubDate= episode.publish_on
+          %pubDate= episode.publish_on.rfc2822
           - @podcast.categories_hash.each_pair do |category, subcategories|
             %itunes:category{:text=>category}
               - subcategories.each do |subcategory|

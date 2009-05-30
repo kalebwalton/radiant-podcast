@@ -16,7 +16,6 @@ class Admin::PodcastsController < Admin::ResourceController
   end
 
   def itunes
-    puts "ITUNES"
     @podcast = Podcast.find(params[:podcast_id])
   end
   

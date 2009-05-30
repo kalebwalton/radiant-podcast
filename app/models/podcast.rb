@@ -1,14 +1,6 @@
+require 'yaml'
 class Podcast < ActiveRecord::Base
-  #FIXME - List real iTunes categories
-  CATEGORIES = {
-    "Arts & Entertainment" => [
-      "Architecture",
-      "Books"
-    ],
-    "Technology" => [
-      "High Technology"
-    ]
-  }
+  CATEGORIES = YAML.load(ERB.new(File.read(File.dirname(__FILE__) + '/itunes_categories.yml')).result)
 
   # Callbacks
   
@@ -48,7 +40,7 @@ class Podcast < ActiveRecord::Base
 
   # Return an array of categories
   def categories_array
-    self.categories.split(",")
+    self.categories.split(",") unless self.categories.nil?
   end
 
   # Return a hash of categories and subcategories

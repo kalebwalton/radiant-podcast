@@ -17,8 +17,15 @@ class PodcastEpisode < ActiveRecord::Base
   validates_length_of :subtitle, :maximum => 255, :message => '{{count}}-character limit'
   validates_length_of :description, :maximum => 4000, :message => '{{count}}-character limit'
 
-  #FIXME - validate the right content_types
-  validates_format_of :content_type, :message => 'invalid media format, must be in MP3, MPG or AAC format', :with => /.*(mp3|mpg|mpeg|aac).*/
+  validates_format_of :content_type, :message => 'must be in MP3, MP4, M4A, M4V, MOV or PDF format', :with => /.*(mp3|mp4|m4a|m4v|mpg|mpeg|quicktime|pdf).*/
+  validates_format_of :filename, :message => 'must end in .mp3, .mp4, .m4a, .m4v, .mov, or .pdf', :with => /.*\.(m4a|mp3|mov|mp4|m4v|pdf)/
 
-
+  def validate
+    unless errors.on(:content_type).nil?
+      errors.add(:uploaded_data, errors.on(:content_type))
+    end
+    unless errors.on(:filename).nil?
+      errors.add(:uploaded_data, errors.on(:filename))
+    end
+  end
 end
