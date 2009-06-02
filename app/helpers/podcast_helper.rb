@@ -22,8 +22,8 @@ module PodcastHelper
     hours+":"+minutes+":"+seconds
   end
 
-  def rfc2822(time)
-    time.rfc2822
+  def rfc2822(date)
+    date.to_time.rfc2822 unless date.nil?
   end
 
 end
