@@ -10,7 +10,7 @@ module PodcastHelper
 
   #FIXME This is repeated in two helpers - combine in 1 or put it in the model
   def itunes_duration(duration)
-    return "-" if duration.nil?
+    return "0:00" if duration.nil?
     hours = duration/60/60
     duration -= hours * 60 * 60
     minutes = duration/60
