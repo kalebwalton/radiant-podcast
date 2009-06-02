@@ -1,3 +1,4 @@
+require 'time'
 module PodcastHelper
   def full_absolute_url(url)
     "http#{'s' if request.ssl? || request.port==443}://#{request.host_with_port}"+url
@@ -19,6 +20,10 @@ module PodcastHelper
     minutes = minutes < 10 ? "0#{minutes}" : "#{minutes}"
     seconds = seconds < 10 ? "0#{seconds}" : "#{seconds}"
     hours+":"+minutes+":"+seconds
+  end
+
+  def rfc2822(time)
+    time.rfc2822
   end
 
 end
