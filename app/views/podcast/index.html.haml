@@ -24,7 +24,7 @@
         %item
           %title= episode.title
           %description= episode.description
-          %link= episode.link || @podcast.link
+          %link= episode.link.nil? || episode.link.empty? ? @podcast.link : episode.link
           %enclosure{:url => full_absolute_url(episode.public_filename), :type => episode.content_type, :length => episode.size}/
           %pubDate= rfc2822(episode.publish_on)
           - @podcast.categories_hash.each_pair do |category, subcategories|
