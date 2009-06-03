@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<rss version='2.02' xmlns:itunes='http://www.itunes.com/dtds/podcast-1.0.dtd'>
+  <channel>
+    <title><%=@podcast.title%></title>
+    <link><%=@podcast.link%></link>
+    <language>en-us</language>
+    <copyright><%=@podcast.copyright%></copyright>
+    <itunes:subtitle><%=@podcast.subtitle%></itunes:subtitle>
+    <itunes:author><%=@podcast.author%></itunes:author>
+    <itunes:summary><%=@podcast.description%></itunes:summary>
+    <description><%=@podcast.description%></description>
+    <itunes:owner>
+      <itunes:name><%=@podcast.author%></itunes:name>
+      <itunes:email><%=@podcast.email%></itunes:email>
+    </itunes:owner>
+    <% unless @podcast.image.nil? %>
+    <itunes:image href='<%=full_absolute_url(@podcast.image.public_filename)%>'/>
+    <% end%>
+    <% unless @podcast.categories.empty? %> 
+      <% @podcast.categories_hash.each_pair do |category, subcategories| %>
+    <itunes:category text='<%=category%>'>
+        <% unless subcategories.empty? %>
+          <% subcategories.each do |subcategory| %>
+      <itunes:category text='<%=subcategory%>' />
+          <% end %>
+        <% end %>
+    </itunes:category>
+      <% end %>
+    <% end %>
+    <% unless @episodes.empty? %>
+      <% @episodes.each do |episode| %>
+    <item>
+      <title><%=episode.title%></title>
+      <description><%=episode.description%></description>
+      <link><%=episode.link || @podcast.link%></link>
+      <enclosure length='<%=episode.size%>' type='<%=episode.content_type%>' url='<%=full_absolute_url(episode.public_filename)%>' />
+      <pubDate><%=rfc2822(episode.publish_on)%></pubDate>
+    <% unless @podcast.categories.empty? %> 
+      <% @podcast.categories_hash.each_pair do |category, subcategories| %>
+      <itunes:category text='<%=category%>'>
+        <% unless subcategories.empty? %>
+          <% subcategories.each do |subcategory| %>
+        <itunes:category text='<%=subcategory%>' />
+          <% end %>
+        <% end %>
+      </itunes:category>
+      <% end %>
+    <% end %>
+      <itunes:explicit>no</itunes:explicit>
+      <itunes:duration><%=itunes_duration(episode.duration)%></itunes:duration>
+    </item>
+      <% end %>
+    <% end %>
+  </channel>
+</rss>
