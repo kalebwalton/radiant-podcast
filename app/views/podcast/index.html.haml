@@ -9,6 +9,7 @@
     %itunes:author= @podcast.author
     %itunes:summary= @podcast.description
     %description= @podcast.description
+    %itunes:explicit no
     %itunes:owner
       %itunes:name= @podcast.author
       %itunes:email= @podcast.email
@@ -17,7 +18,7 @@
     - @podcast.categories_hash.each_pair do |category, subcategories|
       %itunes:category{:text=>category}
         - subcategories.each do |subcategory|
-          %itunes:category{:text=>subcategory} /
+          %itunes:category{:text=>subcategory}/
     - unless @episodes.empty?
       - @episodes.each do |episode|
         %item
