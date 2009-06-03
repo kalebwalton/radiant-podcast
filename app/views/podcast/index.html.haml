@@ -1,8 +1,9 @@
 !!! XML
-%rss{:version => "2.0", "xmlns:itunes"=>"http://www.itunes.com/dtds/podcast-1.0.dtd"}
+%rss{:version => "2.0", "xmlns:itunes"=>"http://www.itunes.com/dtds/podcast-1.0.dtd", "xmlns:atom"=>"http://www.w3.org/2005/Atom"}
   %channel
     %title= @podcast.title
     %link= @podcast.link
+    %atom:link{:href => @podcast.link, :rel=>"self", :type=>"application/rss+xml"}/
     %language en-us
     %copyright= @podcast.copyright
     %itunes:subtitle= @podcast.subtitle
@@ -15,10 +16,11 @@
       %itunes:email= @podcast.email
     - unless @podcast.image.nil?
       %itunes:image{:href => full_absolute_url(@podcast.image.public_filename)}
-    - @podcast.categories_hash.each_pair do |category, subcategories|
-      %itunes:category{:text=>category}
-        - subcategories.each do |subcategory|
-          %itunes:category{:text=>subcategory}/
+    - unless @podcast.categories.nil? || @podcast.categories.empty?  
+      - @podcast.categories_hash.each_pair do |category, subcategories|
+        %itunes:category{:text=>category}
+          - subcategories.each do |subcategory|
+            %itunes:category{:text=>subcategory}/
     - unless @episodes.empty?
       - @episodes.each do |episode|
         %item
