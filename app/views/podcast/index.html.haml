@@ -1,0 +1,34 @@
+!!! XML
+%rss{:version => "2.0", "xmlns:itunes"=>"http://www.itunes.com/dtds/podcast-1.0.dtd"}
+  %channel
+    %title= @podcast.title
+    %link= @podcast.link
+    %language en-us
+    %copyright= @podcast.copyright
+    %itunes:subtitle= @podcast.subtitle
+    %itunes:author= @podcast.author
+    %itunes:summary= @podcast.description
+    %description= @podcast.description
+    %itunes:owner
+      %itunes:name= @podcast.author
+      %itunes:email= @podcast.email
+    - unless @podcast.image.nil?
+      %itunes:image{:href => full_absolute_url(@podcast.image.public_filename)}
+    - @podcast.categories_hash.each_pair do |category, subcategories|
+      %itunes:category{:text=>category}
+        - subcategories.each do |subcategory|
+          %itunes:category{:text=>subcategory} /
+    - unless @episodes.empty?
+      - @episodes.each do |episode|
+        %item
+          %title= episode.title
+          %description= episode.description
+          %link= episode.link || @podcast.link
+          %enclosure{:url => full_absolute_url(episode.public_filename), :type => episode.content_type, :length => episode.size}/
+          %pubDate= rfc2822(episode.publish_on)
+          - @podcast.categories_hash.each_pair do |category, subcategories|
+            %itunes:category{:text=>category}
+              - subcategories.each do |subcategory|
+                %itunes:category{:text=>subcategory}/
+          %itunes:explicit no
+          %itunes:duration= itunes_duration(episode.duration)
