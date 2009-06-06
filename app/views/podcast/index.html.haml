@@ -23,9 +23,10 @@
             %itunes:category{:text=>subcategory}/
     - unless @episodes.empty?
       - @episodes.each do |episode|
-        %item{:guid=>full_absolute_url(episode.public_filename)}
+        %item
           %title= episode.title
           %description= episode.description
+          %guid= full_absolute_url(episode.public_filename)
           %link= episode.link.nil? || episode.link.empty? ? @podcast.link : episode.link
           %enclosure{:url => full_absolute_url(episode.public_filename), :type => episode.content_type, :length => episode.size}/
           %pubDate= rfc2822(episode.publish_on)
