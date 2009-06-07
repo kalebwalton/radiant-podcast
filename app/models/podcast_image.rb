@@ -4,5 +4,5 @@ class PodcastImage < ActiveRecord::Base
   
   validates_as_attachment
 
-  validates_format_of :content_type, :message => 'invalid image format, must be in PNG or JPG format', :with => /.*(png|jpg|jpeg).*/
+  validates_format_of :content_type, :message => 'invalid image format, must be in PNG or JPG format', :with => /.*(png|jpg|jpeg|pjpeg).*/
 end
