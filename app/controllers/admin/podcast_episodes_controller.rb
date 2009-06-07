@@ -36,13 +36,11 @@ class Admin::PodcastEpisodesController < Admin::ResourceController
   
   def set_duration_value
     #FIXME - Implement duration discovery for all media formats. For now we'll use manual entry.
-    if !@podcast_episode.nil? && @podcast_episode.valid?
-      hours = params[:duration_hours].to_i
-      minutes = params[:duration_minutes].to_i
-      seconds = params[:duration_seconds].to_i
-      duration = (hours*60*60) + (minutes*60) + seconds
-      params[:podcast_episode][:duration] = duration;
-    end
+    hours = params[:duration_hours].to_i
+    minutes = params[:duration_minutes].to_i
+    seconds = params[:duration_seconds].to_i
+    duration = (hours*60*60) + (minutes*60) + seconds
+    params[:podcast_episode][:duration] = duration;
   end
 
 end

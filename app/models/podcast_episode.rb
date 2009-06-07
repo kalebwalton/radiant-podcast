@@ -1,5 +1,5 @@
 class PodcastEpisode < ActiveRecord::Base
-  order_by 'publish_on desc'
+  default_scope :order => 'publish_on DESC'
 
   # Callbacks
   
