@@ -9,7 +9,7 @@ class Podcast < ActiveRecord::Base
   has_one :image, :class_name => "PodcastImage" 
   
   # Validations
-  validates_presence_of :title, :author, :email, :link, :description, :categories, :keywords, :message => 'required'
+  validates_presence_of :title, :slug, :author, :email, :link, :description, :categories, :keywords, :message => 'required'
   
   validates_length_of :title, :maximum => 255, :message => '{{count}}-character limit'
   validates_length_of :subtitle, :maximum => 255, :message => '{{count}}-character limit'
@@ -18,7 +18,8 @@ class Podcast < ActiveRecord::Base
   validates_length_of :link, :maximum => 4000, :message => '{{count}}-character limit'
   validates_length_of :description, :maximum => 4000, :message => '{{count}}-character limit'
 
-  validates_uniqueness_of :title, :message => 'title is already in use'
+  validates_uniqueness_of :title
+  validates_uniqueness_of :slug
 
   def validate
     if !self.image.nil? && !self.image.valid?
@@ -26,11 +27,6 @@ class Podcast < ActiveRecord::Base
         errors.add :image, msg
       }
     end
-  end
-
-  # Return a slug to use for the URL
-  def slug
-    self.title.to_slug.gsub(/-{1,}/, '-')
   end
 
   # Accept an array of categories

@@ -1,8 +1,12 @@
+- include_javascript 'extensions/podcast/podcast'
 - form_for [:admin, @podcast], :html => {:multipart => true} do |f|
   .form-area
     %p.title
       = f.label :title
       = f.text_field :title, :class => 'textbox', :maxlength => 255
+    %p.slug
+      = f.label "Slug (unique part of feed URL)"
+      = f.text_field :slug, :class => 'textbox', :maxlength => 255
     %p.subtitle
       = f.label :subtitle, "Subtitle (optional) "
       = f.text_field :subtitle, :class => 'textbox', :maxlength => 255, :style => "width: 100%"
