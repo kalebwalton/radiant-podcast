@@ -5,10 +5,10 @@ class PodcastEpisode < ActiveRecord::Base
   
   # Associations
   belongs_to :podcast
-  has_attachment :storage => :file_system, :max_size => 25.megabytes
+  has_attachment :storage => :file_system, :max_size => 50.megabytes
   
   # Validations
-  validates_as_attachment
+  validates_attachment :size => "The file you uploaded was larger than the maximum size of 50MB" 
   validates_uniqueness_of :filename
 
   validates_presence_of :title, :content_type, :filename, :size, :publish_on, :podcast_id, :message => 'required'

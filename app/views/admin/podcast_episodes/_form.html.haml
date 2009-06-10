@@ -1,4 +1,5 @@
 - form_for [:admin, @podcast, @podcast_episode], :html => {:multipart => true} do |f|
+  = f.error_messages :header_message => nil, :message => nil
   .form-area
     = f.hidden_field :podcast_id, :value => @podcast.id
     %p.title
@@ -16,7 +17,7 @@
           %th.label
             = f.label :uploaded_data, "File", :class => 'textbox'
           %td.field{:style=>'text-align: left'}
-            - unless @podcast_episode.filename.nil?
+            - unless @podcast_episode.filename.nil? || @podcast_episode.id.nil?
               %p= link_to @podcast_episode.filename, @podcast_episode.public_filename
             = f.file_field :uploaded_data, :class => 'textbox'
         %tr

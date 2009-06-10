@@ -5,7 +5,7 @@ module PodcastHelper
   end
 
   def podcast_feed_url(podcast)
-    full_absolute_url(url_for(:controller => '/podcast', :slug => podcast.slug))
+    full_absolute_url(url_for(:controller => '/podcast', :slug => podcast.slug || ""))
   end
 
   #FIXME This is repeated in two helpers - combine in 1 or put it in the model
