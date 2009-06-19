@@ -4,6 +4,8 @@
   - if !params[:year].nil?
     in
     = params[:year]
+%p 
+  = link_to 'Back to podcasts', admin_podcasts_url
 - unless @oldest_episode_year.nil? || @current_year == @oldest_episode_year
   %p
     %strong Year: &nbsp;

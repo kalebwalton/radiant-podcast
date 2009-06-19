@@ -25,7 +25,6 @@
         %td.actions
           = link_to image_tag('extensions/podcast/admin/manage-episodes.png', :alt => 'Manage Episodes'), admin_podcast_podcast_episodes_path(podcast) 
           = link_to image_tag('extensions/podcast/admin/submit-to-itunes.png', :alt => 'Submit to iTunes'), submit_to_itunes_path(podcast)
-          = link_to_function image_tag('extensions/podcast/admin/copy-feed-url.png', :alt => 'Copy Feed URL to Clipboard'), "copy_feed_url('#{podcast_feed_url(podcast)}')"
           = link_to image('remove', :alt => 'Remove Podcast'), remove_admin_podcast_url(podcast)
 
 %p

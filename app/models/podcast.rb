@@ -17,6 +17,7 @@ class Podcast < ActiveRecord::Base
   validates_length_of :email, :maximum => 255, :message => '{{count}}-character limit'
   validates_length_of :link, :maximum => 4000, :message => '{{count}}-character limit'
   validates_length_of :description, :maximum => 4000, :message => '{{count}}-character limit'
+  validates_length_of :slug, :minimum => 1, :message => '{{count}}-character minimum'
 
   validates_uniqueness_of :title
   validates_uniqueness_of :slug
