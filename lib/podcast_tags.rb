@@ -11,11 +11,15 @@ module PodcastTags
   tag 'podcast' do |tag|
     podcast = nil
     title = tag.attr['title']
+    url = tag.attr['url']
+    url.gsub!(/.*\//,'') unless url.nil?
     id = tag.attr['id']
     if !title.nil?
       podcast = Podcast.find_by_title(title)
     elsif !id.nil?
       podcast = Podcast.find(id)
+    elsif !url.nil?
+      podcast = Podcast.find_by_slug(url)
     end
     tag.locals.podcast = podcast unless podcast.nil?
     tag.expand

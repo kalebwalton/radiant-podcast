@@ -3,9 +3,12 @@
     %p.title
       = f.label :title
       = f.text_field :title, :class => 'textbox', :maxlength => 255
+    %br
     %p.slug
-      = f.label "Slug (unique part of feed URL)"
-      = f.text_field :slug, :class => 'textbox', :maxlength => 255
+      = f.label :slug, "Feed URL"
+      %br
+      %span{:style => "white-space: nowrap"}
+        = podcast_url('') + (f.text_field :slug, :class => 'textbox', :maxlength => 255, :style=> "width: 300px")
     %p.subtitle
       = f.label :subtitle, "Subtitle (optional) "
       = f.text_field :subtitle, :class => 'textbox', :maxlength => 255, :style => "width: 100%"
@@ -16,7 +19,7 @@
       %table.fieldset
         %tr
           %th.label
-            = f.label :image, "Image", :class => 'optional'
+            = f.label :image, "Logo", :class => 'optional'
           %td.field
             - if !@podcast.image.nil? && @podcast.image.valid?
               %p
