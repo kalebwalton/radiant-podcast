@@ -31,4 +31,4 @@
           %enclosure{:url => full_absolute_url(episode.public_filename), :type => episode.content_type, :length => episode.size}/
           %pubDate= rfc2822(episode.publish_on)
           %itunes:explicit no
-          %itunes:duration= itunes_duration(episode.duration)
+          %itunes:duration= episode.human_duration

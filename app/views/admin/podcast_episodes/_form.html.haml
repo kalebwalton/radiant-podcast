@@ -6,10 +6,13 @@
       = f.label :title
       = f.text_field :title, :class => 'textbox', :maxlength => 255
     %p.subtitle
-      = f.label :subtitle, "Subtitle (optional) "
+      = f.label :author, "Author"
+      = f.text_field :author, :class => 'textbox', :maxlength => 255, :style => "width: 100%"
+    %p.subtitle
+      = f.label :subtitle, "Subtitle (optional)"
       = f.text_field :subtitle, :class => 'textbox', :maxlength => 255, :style => "width: 100%"
     %p.description
-      = f.label :description
+      = f.label :description, "Description (optional)"
       ~ f.text_area :description, :class => "textarea", :style => "width: 100%; height: 100px;"
     #meta.row
       %table.fieldset
@@ -38,7 +41,7 @@
             = f.datetime_select :publish_on, :class => 'textbox'
         %tr
           %th.label
-            = f.label :link, "Link (blank for default)", :class => "optional"
+            = f.label :link, "Link (optional)"
           %td.field{:style=>'text-align: left'}
             = f.text_field :link, :class => 'textbox', :maxlength => 4000
 

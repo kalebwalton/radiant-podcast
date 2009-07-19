@@ -27,7 +27,7 @@ module PodcastTags
 
   [:title, :subtitle, :description, :author].each do |method|
     desc %{
-      Renders the @#{method}@ attribute of the current podcast.
+      Displays the @#{method}@ attribute of the current podcast.
       *Usage:*
 
       <pre><code>
@@ -39,7 +39,7 @@ module PodcastTags
     tag 'podcast:'+method.to_s do |tag|
       tag.locals.podcast.send(method)
     end
-  end
+  end  
 
   desc %{
     Gives access to a podcast's episodes.
@@ -85,27 +85,47 @@ module PodcastTags
     result
   end
 
-  [:title, :subtitle, :description].each do |method|
+  [:title, :subtitle, :description, :duration, :author].each do |method|
     desc %{
-      Renders the @#{method}@ attribute of the current episode.
+      Displays the @#{method}@ attribute of the current episode.
       
       *Usage:*
 
       <pre><code>
-        <r:podcast id="1">
-          <r:episodes year="2009">
+        <r:podcast url="http://mysite.com/podcast/my-url">
+          <r:episodes:each limit="8">
             <r:#{method}/>
-          </r:episodes>
+          </r:episodes:each>
         </r:podcast>
       </code></pre>
     }
     tag 'podcast:episodes:'+method.to_s do |tag|
+      method = :human_duration if method == :duration
       tag.locals.episode.send(method)
     end
   end
 
   desc %{
-    Renders a link to the podcast episode.
+    Displays the publish date of a podcast episode. 
+
+    *Usage:*
+    
+    <pre><code>
+      <r:podcast url="http://mysite.com/podcast/my-url">
+        <r:episodes:each limit="8">
+          <r:publish_on [format="%A, %B %d, %Y"]/>
+        </r:episodes:each>
+      </r:podcast>
+    </code></pre>
+  }
+  tag 'podcast:episodes:publish_on' do |tag|
+    format = tag.attr['format'] || "%A, %B %d, %Y";
+    tag.locals.episode.publish_on.strftime(format)
+  end
+
+  
+  desc %{
+    Displays a link to the podcast episode.
 
     *Usage:*
 

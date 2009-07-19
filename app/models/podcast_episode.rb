@@ -28,4 +28,29 @@ class PodcastEpisode < ActiveRecord::Base
       errors.add(:uploaded_data, errors.on(:filename))
     end
   end
+
+  def human_duration
+    return "0:00" if self.duration.nil?
+    dur = self.duration
+    hours = dur/60/60
+    dur -= hours * 60 * 60
+    minutes = dur/60
+    dur -= minutes * 60
+    seconds = dur
+    hours = hours < 10 ? "0#{hours}" : "#{hours}"
+    minutes = minutes < 10 ? "0#{minutes}" : "#{minutes}"
+    seconds = seconds < 10 ? "0#{seconds}" : "#{seconds}"
+    hours+":"+minutes+":"+seconds
+  end
+
+  def human_filesize
+    bytes = self.size
+    a_kilobyte = 1024.to_f
+    a_megabyte = a_kilobyte.to_f * 1024.to_f
+    if bytes < a_megabyte
+      return "#{(bytes.to_f/a_kilobyte).round(2)} KB"
+    else
+      return "#{(bytes.to_f/a_megabyte).round(2)} MB"
+    end
+  end
 end

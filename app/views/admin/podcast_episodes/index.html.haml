@@ -18,7 +18,6 @@
 %table#podcast_episodes.index{:cellspacing=>"0", :border=>"0", :cellpadding=>"0"}
   %thead
     %tr
-      %th.number #
       %th.title Title
       %th.date Date
       %th.length Duration
@@ -27,17 +26,15 @@
   %tbody
     - @podcast_episodes.each do |episode|
       %tr.node.level-1
-        %td.number
-          = episode.number
         %td.title
           = image_tag('extensions/podcast/admin/episode.png', :alt => 'podcast-icon')
           = link_to episode.title, edit_admin_podcast_podcast_episode_url(@podcast, episode)
         %td.date
-          = timestamp(episode.publish_on)
+          = episode.publish_on.strftime("%B %d, %Y")
         %td.length
-          = human_duration(episode.duration)
+          = episode.human_duration
         %td.size
-          = human_filesize(episode.size)  
+          = episode.human_filesize  
         %td.actions
           = link_to image('remove', :alt => 'Remove Episode'), remove_admin_podcast_podcast_episode_url(@podcast, episode)
 

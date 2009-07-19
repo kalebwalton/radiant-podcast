@@ -1,6 +1,5 @@
 class Admin::PodcastEpisodesController < Admin::ResourceController
   before_filter :find_podcast
-  before_filter :add_number_value, :only => [:create]
   before_filter :set_duration_properties, :only => [:edit]
   before_filter :set_duration_value, :only => [:update, :create]
 
@@ -8,12 +7,6 @@ class Admin::PodcastEpisodesController < Admin::ResourceController
     @podcast = Podcast.find(params[:podcast_id]) rescue nil unless params[:podcast_id].nil?
   end
   
-  def add_number_value
-    if !params[:podcast_episode].nil? && params[:podcast_episode][:number].nil?
-      params[:podcast_episode][:number] = PodcastEpisode.count(:all, :conditions => ["podcast_id = ?", params[:podcast_id]])+1
-    end
-  end
-
   def index
     year = params[:year] || Time.now.strftime("%Y")
     @podcast_episodes = PodcastEpisode.find(:all, :conditions => ["podcast_id = ? AND publish_on > ? AND publish_on < ?", @podcast.id, DateTime.parse(year+'-01-01 00:00:00'), DateTime.parse(year+'-12-31 23:59:59')])

@@ -19,13 +19,12 @@
           - if podcast.episodes.empty?
             %span.latest_episode_empty= "No episodes"
           - else
-            %span.latest_episode_date= timestamp(podcast.episodes[0].publish_on)
-            %span -
-            %span.latest_episode_title= podcast.episodes[0].title
+            %span.latest_episode_date= podcast.episodes[0].publish_on.strftime("%B %d, %Y")
         %td.actions
-          = link_to image_tag('extensions/podcast/admin/manage-episodes.png', :alt => 'Manage Episodes'), admin_podcast_podcast_episodes_path(podcast) 
+          = link_to image_tag('extensions/podcast/admin/manage-episodes.png', :alt => 'Manage Episodes'), admin_podcast_podcast_episodes_path(podcast)
           = link_to image_tag('extensions/podcast/admin/submit-to-itunes.png', :alt => 'Submit to iTunes'), submit_to_itunes_path(podcast)
           = link_to image('remove', :alt => 'Remove Podcast'), remove_admin_podcast_url(podcast)
 
 %p
   = link_to image_tag('extensions/podcast/admin/new-podcast.png', :alt => 'New Podcast'), new_admin_podcast_url
+
