@@ -1,7 +1,7 @@
 !!! XML
 %rss{:version => "2.0", "xmlns:itunes"=>"http://www.itunes.com/dtds/podcast-1.0.dtd", "xmlns:atom"=>"http://www.w3.org/2005/Atom"}
   %channel
-    %title= h(@podcast.title)
+    %title= h(@podcast.itunes_title.nil? || @podcast.itunes_title.empty? ? @podcast.title : @podcast.itunes_title)
     %link= @podcast.link
     %atom:link{:href => full_absolute_url(request.request_uri), :rel=>"self", :type=>"application/rss+xml"}/
     %language en-us

@@ -9,6 +9,9 @@
       %br
       %span{:style => "white-space: nowrap"}
         = podcast_url('') + (f.text_field :slug, :class => 'textbox', :maxlength => 255, :style=> "width: 300px")
+    %p.itunes_title
+      = f.label :itunes_title, "iTunes Title (optional) "
+      = f.text_field :itunes_title, :class => 'textbox', :maxlength => 255, :style => "width: 100%"
     %p.subtitle
       = f.label :subtitle, "Subtitle (optional) "
       = f.text_field :subtitle, :class => 'textbox', :maxlength => 255, :style => "width: 100%"
