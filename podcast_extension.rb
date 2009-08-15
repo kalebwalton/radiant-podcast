@@ -1,5 +1,6 @@
 # Uncomment this if you reference any of your controllers in activate
 # require_dependency 'application'
+require File.join(File.dirname(__FILE__), 'vendor/mp3info/lib/mp3info')
 
 class PodcastExtension < Radiant::Extension
   version "1.0"
@@ -11,6 +12,7 @@ class PodcastExtension < Radiant::Extension
     map.named_route :podcast, 'podcast/:slug', :controller => 'podcast'
     map.named_route :podcast_by_year, 'podcast/:slug/:year', :controller => 'podcast'
     map.named_route :podcast_episodes_by_year, 'admin/podcasts/:podcast_id/episodes/year/:year', :controller => 'admin/podcast_episodes'
+    map.named_route :podcast_episodes_upload, 'admin/podcasts/episodes/upload', :controller => 'admin/podcast_episodes', :action => 'upload'
     map.named_route :submit_to_itunes, 'admin/podcasts/:podcast_id/itunes', :controller => 'admin/podcasts', :action => 'itunes'
     map.namespace :admin, :member => { :remove => :get } do |admin|
       admin.resources :podcasts, :member => { :remove => :get, :itunes => :get } do |podcasts|
@@ -32,7 +34,13 @@ class PodcastExtension < Radiant::Extension
     Radiant::AdminUI.class_eval do
       attr_accessor :podcasts
     end
+
+    enable_flash_upload_middleware
    
+  end
+
+  def enable_flash_upload_middleware
+    ActionController::Dispatcher.middleware.insert_before(ActionController::Session::CookieStore, FlashMiddleware, ActionController::Base.session_options[:session_key])
   end
 
   def deactivate

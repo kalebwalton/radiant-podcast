@@ -1,3 +1,10 @@
+= javascript_tag "var _cookie_value = '"+cookies[ActionController::Base.session_options[:session_key]]+"'; var _auth_token = '"+form_authenticity_token+"';"
+%style .progressBar{width: 200px; height: 18px; position: relative;}
+- include_javascript 'extensions/podcast/swfupload'
+- include_javascript 'extensions/podcast/swfupload.speed'
+- include_javascript 'extensions/podcast/swfupload.swfobject'
+- include_javascript 'extensions/podcast/progressbar'
+- include_javascript 'extensions/podcast/podcast_episode'
 - form_for [:admin, @podcast, @podcast_episode], :html => {:multipart => true} do |f|
   = f.error_messages :header_message => nil, :message => nil
   .form-area
@@ -18,11 +25,22 @@
       %table.fieldset
         %tr
           %th.label
-            = f.label :uploaded_data, "File", :class => 'textbox'
-          %td.field{:style=>'text-align: left'}
-            - unless @podcast_episode.filename.nil? || @podcast_episode.id.nil?
-              %p= link_to @podcast_episode.filename, @podcast_episode.public_filename
-            = f.file_field :uploaded_data, :class => 'textbox'
+            = f.label :uploaded_data, "File (max 25mb)", :class => 'textbox'
+          %td.field{:style=>'text-align: left; padding-top: 10px;'}
+            %div{:style => "float: left; margin-right: 10px;"}
+              - unless @podcast_episode.filename.nil? || @podcast_episode.id.nil?
+                %span{:id => "upload_name"}= link_to @podcast_episode.filename, @podcast_episode.public_filename
+              - else
+                %span{:id => "upload_name"}
+            %div{:style => "float: left; margin-right: 10px;"}
+              - unless @podcast_episode.human_filesize.nil? || @podcast_episode.id.nil?
+                %span{:id => "upload_size"}= @podcast_episode.human_filesize
+              - else
+                %span{:id => "upload_size"}
+            %div{:id => "upload_progress", :style => "float: left;"}
+            %div{:style => "float: left; clear: both;"}
+              %span{:id => "upload_button"}
+            = hidden_field_tag :upload_id
         %tr
           %th.label
             = f.label :duration
@@ -48,7 +66,7 @@
   = javascript_tag "$('podcast_episode_title').activate()"
 
   %p.buttons
-    = save_model_button(@podcast_episode, :label => @podcast_episode.new_record? ? "Create Episode" : "Save Changes")
+    = save_model_button(@podcast_episode, :label => @podcast_episode.new_record? ? "Create Episode" : "Save Changes", :id => "submit_button")
     or
     = link_to 'Cancel', admin_podcast_podcast_episodes_url(@podcast)
 
