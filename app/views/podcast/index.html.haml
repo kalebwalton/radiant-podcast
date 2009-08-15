@@ -1,18 +1,18 @@
 !!! XML
 %rss{:version => "2.0", "xmlns:itunes"=>"http://www.itunes.com/dtds/podcast-1.0.dtd", "xmlns:atom"=>"http://www.w3.org/2005/Atom"}
   %channel
-    %title= @podcast.title
+    %title= h(@podcast.title)
     %link= @podcast.link
     %atom:link{:href => full_absolute_url(request.request_uri), :rel=>"self", :type=>"application/rss+xml"}/
     %language en-us
-    %copyright= @podcast.copyright
-    %itunes:subtitle= @podcast.subtitle
-    %itunes:author= @podcast.author
-    %itunes:summary= @podcast.description
-    %description= @podcast.description
+    %copyright= h(@podcast.copyright)
+    %itunes:subtitle= h(@podcast.subtitle)
+    %itunes:author= h(@podcast.author)
+    %itunes:summary= h(@podcast.description)
+    %description= h(@podcast.description)
     %itunes:explicit no
     %itunes:owner
-      %itunes:name= @podcast.author
+      %itunes:name= h(@podcast.author)
       %itunes:email= @podcast.email
     - unless @podcast.image.nil?
       %itunes:image{:href => full_absolute_url(@podcast.image.public_filename)}
@@ -24,8 +24,8 @@
     - unless @episodes.empty?
       - @episodes.each do |episode|
         %item
-          %title= episode.title
-          %description= episode.description
+          %title= h(episode.title)
+          %description= h(episode.description)
           %guid= full_absolute_url(episode.public_filename)
           %link= episode.link.nil? || episode.link.empty? ? @podcast.link : episode.link
           %enclosure{:url => full_absolute_url(episode.public_filename), :type => episode.content_type, :length => episode.size}/
