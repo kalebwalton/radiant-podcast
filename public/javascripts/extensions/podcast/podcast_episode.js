@@ -18,7 +18,7 @@ document.observe('dom:loaded', function() {
   
   swfu = new SWFUpload({
     // Backend settings
-    upload_url: "/admin/podcasts/episodes/upload?_radiant_session="+_cookie_value+"&authenticity_token="+_auth_token,
+    upload_url: "/admin/podcasts/episodes/upload?_radiant_session="+encodeURIComponent(_cookie_value)+"&authenticity_token="+encodeURIComponent(_auth_token),
     file_post_name: "upload",
   
     // Flash file settings
