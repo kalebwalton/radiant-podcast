@@ -165,7 +165,6 @@ function uploadProgress(file, bytesLoaded, bytesTotal) {
 
   $('upload_progress').show();
   var percent = Math.ceil((bytesLoaded / bytesTotal) * 100);
-  console.debug(percent);
   progressBar.setSelection(percent);
 }
 
@@ -176,7 +175,6 @@ function uploadSuccess(file, serverData) {
     this.customSettings.upload_successful = true;
     upload_id = serverData.split("::")[0];
     duration = duration_values(serverData.split("::")[1]);
-    console.debug(duration, serverData.split("::")[1]);
     if (duration) {
       $("duration_hours").setValue(duration[0]);
       $("duration_minutes").setValue(duration[1]);
