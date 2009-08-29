@@ -9,59 +9,59 @@
   = f.error_messages :header_message => nil, :message => nil
   .form-area
     = f.hidden_field :podcast_id, :value => @podcast.id
-    %p.title
-      = f.label :title
-      = f.text_field :title, :class => 'textbox', :maxlength => 255
-    %p.subtitle
-      = f.label :author, "Author"
-      = f.text_field :author, :class => 'textbox', :maxlength => 255, :style => "width: 100%"
-    %p.subtitle
-      = f.label :subtitle, "Subtitle (optional)"
-      = f.text_field :subtitle, :class => 'textbox', :maxlength => 255, :style => "width: 100%"
-    %p.description
-      = f.label :description, "Description (optional)"
-      ~ f.text_area :description, :class => "textarea", :style => "width: 100%; height: 100px;"
-    #meta.row
-      %table.fieldset
-        %tr
-          %th.label
-            = f.label :uploaded_data, "File (max 25mb)", :class => 'textbox'
-          %td.field{:style=>'text-align: left; padding-top: 10px;'}
-            %div{:style => "float: left; margin-right: 10px;"}
-              - unless @podcast_episode.filename.nil? || @podcast_episode.id.nil?
-                %span{:id => "upload_name"}= link_to @podcast_episode.filename, @podcast_episode.public_filename
-              - else
-                %span{:id => "upload_name"}
-            %div{:style => "float: left; margin-right: 10px;"}
-              - unless @podcast_episode.human_filesize.nil? || @podcast_episode.id.nil?
-                %span{:id => "upload_size"}= @podcast_episode.human_filesize
-              - else
-                %span{:id => "upload_size"}
-            %div{:id => "upload_progress", :style => "float: left;"}
-            %div{:style => "float: left; clear: both;"}
-              %span{:id => "upload_button"}
-            = hidden_field_tag :upload_id
-        %tr
-          %th.label
-            = f.label :duration
-          %td.field{:style=>'text-align: left'}
-            %div
-              = select_tag :duration_hours, options_for_select(0..12, @duration_hours || 0)
-              hours
-              = select_tag :duration_minutes, options_for_select(0..59, @duration_minutes || 0)
-              minutes
-              = select_tag :duration_seconds, options_for_select(0..59, @duration_seconds || 0)
-              seconds
-        %tr
-          %th.label
-            = f.label :publish_on
-          %td.field{:style=>'text-align: left'}
-            = f.datetime_select :publish_on, :class => 'textbox'
-        %tr
-          %th.label
-            = f.label :link, "Link (optional)"
-          %td.field{:style=>'text-align: left'}
-            = f.text_field :link, :class => 'textbox', :maxlength => 4000
+    %div.file{:style => "padding-bottom: 10px;"}
+      = f.label :uploaded_data, @podcast_episode.new_record? ? "Select an MP3 (max 25mb)" : "MP3 File (max 25mb)", :style => "display: block; margin-bottom: 3px;"
+      %div{:style => "float: left; clear: both; margin-right: 10px;"}
+        %span{:id => "upload_button"}
+      %div{:style => "float: left; margin-right: 10px;"}
+        - unless @podcast_episode.filename.nil? || @podcast_episode.id.nil?
+          %span{:id => "upload_name"}= link_to @podcast_episode.filename, @podcast_episode.public_filename
+        - else
+          %span{:id => "upload_name"}
+      %div{:style => "float: left; margin-right: 10px;"}
+        - unless @podcast_episode.human_filesize.nil? || @podcast_episode.id.nil?
+          %span{:id => "upload_size"}= @podcast_episode.human_filesize
+        - else
+          %span{:id => "upload_size"}
+      %div{:id => "upload_progress", :style => "float: left; margin-right: 10px;"}
+      %div{:id => "upload_status", :style => "float: left; display: none;"}
+        = image_tag 'admin/spinner.gif'
+        %span{:id => "upload_status_text", :style => "padding-left: 5px;"}
+      %br{:style => "clear: both;"}
+      = hidden_field_tag :upload_id
+    %div{:id => "form_body", :style => @podcast_episode.new_record? && @podcast_episode.errors.empty? ? "display: none;" : ""}
+      %p.title
+        = f.label :title
+        = f.text_field :title, :class => 'textbox', :maxlength => 255
+      %p.author
+        = f.label :author, "Author"
+        = f.text_field :author, :class => 'textbox', :maxlength => 255, :style => "width: 100%"
+      %p.description
+        = f.label :description, "Description (optional)"
+        ~ f.text_area :description, :class => "textarea", :style => "width: 100%; height: 100px;"
+      #meta.row
+        %table.fieldset
+          %tr
+            %th.label
+              = f.label :duration
+            %td.field{:style=>'text-align: left'}
+              %div
+                = select_tag :duration_hours, options_for_select(0..12, @duration_hours || 0)
+                hours
+                = select_tag :duration_minutes, options_for_select(0..59, @duration_minutes || 0)
+                minutes
+                = select_tag :duration_seconds, options_for_select(0..59, @duration_seconds || 0)
+                seconds
+          %tr
+            %th.label
+              = f.label :publish_on
+            %td.field{:style=>'text-align: left'}
+              = f.datetime_select :publish_on, :class => 'textbox'
+          %tr
+            %th.label
+              = f.label :link, "Link (optional)"
+            %td.field{:style=>'text-align: left'}
+              = f.text_field :link, :class => 'textbox', :maxlength => 4000
 
   = javascript_tag "$('podcast_episode_title').activate()"
 

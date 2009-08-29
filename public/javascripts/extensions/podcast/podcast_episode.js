@@ -86,15 +86,71 @@ function handleSubmit(e) {
 	return false;
 }
 
-// Called by the queue complete handler to submit the form
-function uploadDone() {
-  // Flag that the upload has been completed
-  // TODO: It'd be nice if this was set if they had validation errors so they don't have to reupload.
-  uploadCompleted = true;
+function uploadProgress(file, bytesLoaded, bytesTotal) {
+
+  $('upload_progress').show();
+  var percent = Math.ceil((bytesLoaded / bytesTotal) * 100);
+  progressBar.setSelection(percent);
   
-  // If the submit button was already pressed then we're going to submit the form for the user
-  if (submitPressed) {
-		document.forms[0].submit();
+  if (percent == 100) {
+    $('upload_status_text').update("Processing MP3...")
+    Element.appear('upload_status');
+  }
+}
+
+function uploadSuccess(file, serverData) {
+  var json = eval("("+serverData+")")
+  if (serverData == "") {
+    this.customSettings.upload_successful = false;
+  } else {
+    this.customSettings.upload_successful = true;
+    $("upload_id").value = json.upload_id;
+    
+    if (json.mp3info) {
+      var do_update = true;
+      if (
+        $('podcast_episode_title').value.length > 0 ||
+        $('podcast_episode_author').value.length > 0 ||
+        $('podcast_episode_description').value.length > 0 ||
+        $("duration_hours").value > 0 ||
+        $("duration_minutes").value > 0 ||
+        $("duration_seconds").value > 0 
+      ) {
+        if (!confirm("Do you want to overwrite the form below with the information contained in the MP3 you uploaded?")) {
+          do_update = false;
+        }
+      }
+      if (do_update) {
+        var duration = duration_values(json.length);
+        if (duration) {
+          $("duration_hours").setValue(duration[0]);
+          $("duration_minutes").setValue(duration[1]);
+          $("duration_seconds").setValue(duration[2]);
+        }
+        $('podcast_episode_title').setValue(json.mp3info.title || "");
+        $('podcast_episode_author').setValue(json.mp3info.artist || "");
+        $('podcast_episode_description').setValue(json.mp3info.comments || "");
+      }
+    }
+  }
+}
+
+function uploadComplete(file) {
+  if (this.customSettings.upload_successful) {
+    //this.setButtonDisabled(true);
+    // Flag that the upload has been completed
+    // TODO: It'd be nice if this was set if they had validation errors so they don't have to reupload.
+    uploadCompleted = true;
+    
+    // If the submit button was already pressed then we're going to submit the form for the user
+    if (submitPressed) {
+      document.forms[0].submit();
+    }
+    Element.fade('upload_status');
+    Element.appear.delay(1, 'form_body');
+  } else {
+    resetUploadState();
+    alert("There was a problem with the upload.\nThe server did not accept it.");
   }
 }
 
@@ -159,40 +215,6 @@ function fileDialogComplete(numFilesSelected, numFilesQueued) {
 		swfu.startUpload();
     uploadStarted = true;
 	} catch (ex) {}
-}
-
-function uploadProgress(file, bytesLoaded, bytesTotal) {
-
-  $('upload_progress').show();
-  var percent = Math.ceil((bytesLoaded / bytesTotal) * 100);
-  progressBar.setSelection(percent);
-}
-
-function uploadSuccess(file, serverData) {
-  if (serverData == "") {
-    this.customSettings.upload_successful = false;
-  } else {
-    this.customSettings.upload_successful = true;
-    upload_id = serverData.split("::")[0];
-    duration = duration_values(serverData.split("::")[1]);
-    if (duration) {
-      $("duration_hours").setValue(duration[0]);
-      $("duration_minutes").setValue(duration[1]);
-      $("duration_seconds").setValue(duration[2]);
-    }
-
-    $("upload_id").value = upload_id;
-  }
-}
-
-function uploadComplete(file) {
-  if (this.customSettings.upload_successful) {
-    //this.setButtonDisabled(true);
-    uploadDone();
-  } else {
-    resetUploadState();
-    alert("There was a problem with the upload.\nThe server did not accept it.");
-  }
 }
 
 function uploadError(file, errorCode, message) {

@@ -65,17 +65,17 @@ class Admin::PodcastEpisodesController < Admin::ResourceController
       # to the client.
       # FIXME: Consider putting this in the save/create methods so
       # the user doesn't even have to see it in the submission area
-      length = 0
-      Mp3Info.open(temp_file.path) do |mp3info|
-        length = mp3info.length
+      mp3info = nil
+      Mp3Info.open(temp_file.path) do |tmp|
+        mp3info = tmp
       end
       
       # Return the upload ID (everything after /tmp/)
       # Also include the mp3 length after a '::' so we can split it
       # in javascript and populate the duration fields
-      puts temp_file.path
       upload_id = temp_file.path.gsub(/.*\//, '')
-      render :text => upload_id+"::"+length.to_s
+      
+      render :json => {:upload_id => upload_id, :length => mp3info.length, :mp3info => mp3info.tag1}.to_json
     end
   end
 
