@@ -71,8 +71,8 @@ module PodcastTags
     values = []
     conditions << "podcast_id = ?"
     values << tag.locals.podcast.id
-    conditions << "publish_on > ? AND publish_on < ?" unless year.nil?
-    values.concat [DateTime.parse(year+'-01-01 00:00:00'), DateTime.parse(year+'-12-31 23:59:59')] unless year.nil?
+    conditions << "publish_on > ? AND publish_on < ?" unless tag.attr['year'].nil?
+    values.concat [DateTime.parse(year+'-01-01 00:00:00'), DateTime.parse(year+'-12-31 23:59:59')] unless tag.attr['year'].nil?
     conditions = [conditions.join(" AND ")]
     conditions.concat values
     episodes = PodcastEpisode.find(:all, :conditions => conditions, :limit => limit)
