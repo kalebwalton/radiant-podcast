@@ -5,8 +5,8 @@ module PodcastTags
     Causes the tags referring to a podcast's attributes to refer to the current podcast.
 
     *Usage:*
-    
-    <pre><code><r:podcast [id="podcast_id"] [name="podcast_name"]>...</r:podcast></code></pre>
+
+    <pre><code><r:podcast [id="podcast_id"] [name="podcast_name"] [url="podcast_url"]>...</r:podcast></code></pre>
   }
   tag 'podcast' do |tag|
     podcast = nil
@@ -14,6 +14,9 @@ module PodcastTags
     url = tag.attr['url']
     url.gsub!(/.*\//,'') unless url.nil?
     id = tag.attr['id']
+    if title.nil? and id.nil? and url.nil?
+      raise TagError.new("either a 'title', 'id' or 'url' must be provided to the podcast tag")
+    end
     if !title.nil?
       podcast = Podcast.find_by_title(title)
     elsif !id.nil?
@@ -39,13 +42,13 @@ module PodcastTags
     tag 'podcast:'+method.to_s do |tag|
       tag.locals.podcast.send(method)
     end
-  end  
+  end
 
   desc %{
     Gives access to a podcast's episodes.
 
     *Usage:*
-    
+
     <pre><code><r:episodes>...</r:episodes></code></pre>
   }
   tag 'podcast:episodes' do |tag|
@@ -58,7 +61,7 @@ module PodcastTags
     By default the current year is used.
 
     *Usage:*
-    
+
     <pre><code><r:episodes:each [year="number"] [limit="number"]>
      ...
     </r:episodes:each>
@@ -76,7 +79,7 @@ module PodcastTags
     conditions = [conditions.join(" AND ")]
     conditions.concat values
     episodes = PodcastEpisode.find(:all, :conditions => conditions, :limit => limit)
-    
+
     result = []
     episodes.each do |episode|
       tag.locals.episode = episode
@@ -88,7 +91,7 @@ module PodcastTags
   [:title, :subtitle, :description, :duration, :author].each do |method|
     desc %{
       Displays the @#{method}@ attribute of the current episode.
-      
+
       *Usage:*
 
       <pre><code>
@@ -106,10 +109,10 @@ module PodcastTags
   end
 
   desc %{
-    Displays the publish date of a podcast episode. 
+    Displays the publish date of a podcast episode.
 
     *Usage:*
-    
+
     <pre><code>
       <r:podcast url="http://mysite.com/podcast/my-url">
         <r:episodes:each limit="8">
@@ -123,18 +126,22 @@ module PodcastTags
     tag.locals.episode.publish_on.strftime(format)
   end
 
-  
+
   desc %{
     Displays a link to the podcast episode.
 
     *Usage:*
 
-    <pre><code><r:link><r:title></r:link></code></pre>
+    <pre><code><r:link [other attributes...]/></code></pre>
   }
   tag 'podcast:episodes:link' do |tag|
-    %{<a href="#{full_absolute_url(tag.locals.episode.public_filename)}">#{tag.expand}</a>}
+    options = tag.attr.dup
+    attributes = options.inject('') { |s, (k, v)| s << %{#{k.downcase}="#{v}" } }.strip
+    attributes = " #{attributes}" unless attributes.empty?
+    text = tag.double? ? tag.expand : tag.render('title')
+    %{<a href="#{full_absolute_url(tag.locals.episode.public_filename)}"#{attributes}>#{text}</a>}
   end
-  
+
   def full_absolute_url(url)
     "http#{'s' if request.ssl? || request.port==443}://#{request.host_with_port}"+url
   end
